@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prophet Forecast Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prophet Forecast Monitor</h1>
+    <button onclick="fetchForecast()">Get Forecast</button>
+    <table id="forecast-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Forecast</th>
+                <th>Lower Bound</th>
+                <th>Upper Bound</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        async function fetchForecast() {
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({periods: 52})  // You can change the number of periods as needed
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const forecast = await response.json();
+                console.log(forecast);  // Log the forecast for debugging
+                const tbody = document.querySelector('#forecast-table tbody');
+                tbody.innerHTML = '';
+                forecast.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${new Date(row.ds).toLocaleDateString()}</td>
+                        <td>${row.yhat.toFixed(2)}</td>
+                        <td>${row.yhat_lower.toFixed(2)}</td>
+                        <td>${row.yhat_upper.toFixed(2)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error fetching forecast:', error);
+            }
+        }
+    </script>
+</body>
+</html>
