@@ -45,13 +45,13 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({periods: 52})  // You can change the number of periods as needed
+                    body: JSON.stringify({periods: 52})  
                 });
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const forecast = await response.json();
-                console.log(forecast);  // Log the forecast for debugging
+                console.log(forecast);  
                 const tbody = document.querySelector('#forecast-table tbody');
                 tbody.innerHTML = '';
                 forecast.forEach(row => {
