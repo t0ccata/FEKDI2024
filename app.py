@@ -1,8 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import joblib
 import pandas as pd
-from prophet import Prophet
-from datetime import datetime
 
 app = Flask(__name__)
 
