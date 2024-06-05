@@ -5,7 +5,8 @@
         "src": "app.py",
         "use": "@vercel/python",
         "config": {
-          "zeroConfig": true
+          "zeroConfig": true,
+          "buildCommand": "pip install --upgrade pip"
         }
       }
     ],
